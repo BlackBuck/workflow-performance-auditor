@@ -1,0 +1,30 @@
+name: 'Workflow Performance Auditor (Go)'
+description: 'Analyzes GitHub Actions usage and posts a performance report.'
+
+inputs:
+  lookback-days:
+    description: 'Number of days of workflow history to analyze.'
+    required: false
+    default: '7'
+  GITHUB_TOKEN:
+    description: 'GitHub token for authentication.'
+    required: true
+  report-issue-number:
+    description: 'Issue number to post the performance report.'
+    required: false
+    default: '0'
+
+environment:
+  GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+  INPUT_LOOKBACK_DAYS: ${{ inputs.lookback-days }}
+  GITHUB_REPOSITORY: ${{ github.repository }}
+  OUTPUT_REPORT_URL: ${{ steps.report.outputs.report-url }}
+  OUTPUT_ISSUE_NUMBER: ${{ inputs.report-issue-number }}
+
+outputs:
+  report-url:
+    description: "URL to the generated performance report."
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
